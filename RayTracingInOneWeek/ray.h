@@ -10,9 +10,10 @@ public:
 
 public:
   ray() {}
-  ray(const vec3& a, const vec3& b) {
-    A = a;
-    B = b;
+  ray(const vec3& a, const vec3& b) :
+    A(a),
+    B(b) {
+
   }
 
   const vec3& origin() const {
