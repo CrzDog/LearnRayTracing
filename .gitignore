@@ -1,28 +1,3 @@
-
-# ----[ Visual Studio / MonoDevelop generated ]------- #
-
- 
-
-ExportedObj/
-
-*.svd
-
-*.userprefs
-
-*.csproj
-
-*.pidb
-
-*.suo
-
-*.sln
-
-*.user
-
-*.booproj
-
-
-
 # -------------[ OS generated ]------------------------ #
 
 .DS_Store

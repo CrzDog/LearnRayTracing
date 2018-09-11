@@ -1,11 +1,17 @@
 #include <fstream>
+#include <stdlib.h>
 #include "vec3.h"
 #include "ray.h"
 #include "sphere.h"
 #include "hitable_list.h"
+#include "camera.h"
 #include "float.h"
 
 using namespace std;
+
+double drand48() {
+  return ((double)(rand() / RAND_MAX));
+}
 
 vec3 color(const ray& r, hitable_list *world) {
   hit_record rec;
@@ -23,25 +29,27 @@ int main() {
   ofs.open("./out.ppm");
   int nx = 200;
   int ny = 100;
+  int ns = 100;
   ofs << "P3\n" << nx << " " << ny << "\n255\n";
 
-  vec3 lower_left_corner(-2.f, -1.f, -1.f);
-  vec3 horizontal(4.f, 0.f, 0.f);
-  vec3 vertical(0.f, 2.f, 0.f);
-  vec3 origin(0.f, 0.f, 0.f);
-
-  hitable* list[3];
+  hitable* list[2];
   list[0] = new sphere(vec3(0, 0, -1), 0.5);
   list[1] = new sphere(vec3(0, -100.5f, -1), 100);
-  list[2] = new sphere(vec3(2, 0, -1.5), 1);
-  hitable_list *world = new hitable_list(list, 3);
+  // list[2] = new sphere(vec3(2, 0, -1.5), 1);
+  hitable_list *world = new hitable_list(list,2);
 
+  camera cam;
   for (int j = ny - 1; j >= 0; --j) {
     for (int i = 0; i < nx; ++i) {
-      float u = float(i) / float(nx);
-      float v = float(j) / float(ny);
-      ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-      vec3 col = color(r, world);
+      vec3 col(0, 0, 0);
+      for (int s = 0; s < ns; ++s) {
+        float u = float(i + drand48()) / float(nx);
+        float v = float(j + drand48()) / float(ny);
+        ray r = cam.get_ray(u, v);
+        col += color(r, world);
+      }
+      col /= float(ns);
+
       int ir = int(255.99 * col[0]);
       int ig = int(255.99 * col[1]);
       int ib = int(255.99 * col[2]);
